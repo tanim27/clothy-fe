@@ -1,0 +1,197 @@
+'use client'
+
+import { useGetProductById } from '@/hooks/useProduct'
+import { useCartContext } from '@/providers/CartProvider'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { CircularProgress } from '@mui/material'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { enqueueSnackbar } from 'notistack'
+import { useState } from 'react'
+
+export default function ProductDetails() {
+	const { id } = useParams()
+	const { addToCart } = useCartContext()
+	const { data: product, isLoading, isError } = useGetProductById(id)
+
+	const [selectedSize, setSelectedSize] = useState('')
+	const [quantity, setQuantity] = useState(1)
+
+	if (isLoading)
+		return (
+			<div className='flex justify-center items-center h-screen'>
+				<CircularProgress color='default' />
+			</div>
+		)
+
+	if (isError || !product)
+		return (
+			<div className='p-6 text-center'>
+				<p className='text-red-500 text-lg'>Product not found.</p>
+				<Link
+					href='/'
+					className='mt-4 text-blue-600 underline'
+				>
+					Go Back
+				</Link>
+			</div>
+		)
+
+	// Get available sizes from stock
+	const availableSizes = product.stock.map((item) => item.size)
+
+	// Set default size if not selected
+	if (!selectedSize && availableSizes.length > 0) {
+		setSelectedSize(availableSizes[0])
+	}
+
+	// Find stock quantity for selected size
+	const selectedStock = product.stock.find((item) => item.size === selectedSize)
+	const availableQuantity = selectedStock ? selectedStock.quantity : 0
+
+	const handleAddToCart = () => {
+		if (quantity > availableQuantity) {
+			alert('Not enough stock available!')
+			return
+		}
+
+		addToCart({
+			...product,
+			selectedSize,
+			quantity,
+		})
+		enqueueSnackbar(`Added ${quantity} ${product.name} to cart!`, {
+			variant: 'success',
+		})
+	}
+
+	const incrementQuantity = () => {
+		if (quantity < availableQuantity) setQuantity(quantity + 1)
+	}
+
+	const decrementQuantity = () => {
+		if (quantity > 1) setQuantity(quantity - 1)
+	}
+
+	const handleAddToWishlist = () => {
+		alert(`Added ${product.name} to wishlist`)
+	}
+
+	return (
+		<div className='mx-auto p-8'>
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+				{/* Image Section */}
+				<div className='relative w-full h-100 overflow-hidden shadow-none md:shadow-xl'>
+					<img
+						src={product.image}
+						alt={product.name}
+						className='object-cover transform transition-all duration-300 ease-in-out hover:scale-105'
+					/>
+				</div>
+
+				{/* Product Details */}
+				<div className='flex flex-col justify-between'>
+					<h1 className='text-4xl font-extrabold text-gray-800'>
+						{product.name}
+					</h1>
+					<p className='text-lg text-gray-600 text-justify mt-4'>
+						{product.description}
+					</p>
+
+					{/* Pricing Section */}
+					<div className='mt-6'>
+						{product.offer_price ? (
+							<div className='flex items-center space-x-4'>
+								<p className='text-3xl font-extrabold text-gray-900'>
+									${product.offer_price}
+								</p>
+								<p className='text-xl font-semibold text-red-600 line-through'>
+									${product.price}
+								</p>
+							</div>
+						) : (
+							<p className='text-3xl font-extrabold text-gray-900'>
+								${product.price}
+							</p>
+						)}
+					</div>
+
+					{/* Size Selector */}
+					<div className='mt-6'>
+						<label className='block text-gray-700 font-semibold text-lg'>
+							Size
+						</label>
+						<div className='flex gap-4 mt-2'>
+							{availableSizes.map((size) => (
+								<button
+									key={size}
+									onClick={() => setSelectedSize(size)}
+									className={`px-6 py-2 rounded-md text-lg font-medium cursor-pointer transition-colors border border-gray-300 ${
+										selectedSize === size
+											? 'bg-black text-white'
+											: 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+									}`}
+								>
+									{size}
+								</button>
+							))}
+						</div>
+					</div>
+
+					{/* Stock Display */}
+					<div className='mt-6'>
+						<p className='text-lg font-medium text-gray-700'>
+							{availableQuantity > 0
+								? `In stock: ${availableQuantity}`
+								: 'Out of stock'}
+						</p>
+					</div>
+
+					{/* Quantity Control */}
+					<div className='mt-6 flex items-center space-x-4'>
+						<button
+							onClick={decrementQuantity}
+							className='w-10 h-10 flex items-center justify-center bg-gray-200 text-xl font-bold text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer'
+						>
+							-
+						</button>
+						<input
+							type='number'
+							value={quantity}
+							min='1'
+							max={availableQuantity}
+							onChange={(e) =>
+								setQuantity(Math.min(e.target.value, availableQuantity))
+							}
+							className='w-16 p-2 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black'
+						/>
+						<button
+							onClick={incrementQuantity}
+							className='w-10 h-10 flex items-center justify-center bg-gray-200 text-xl font-bold text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer'
+						>
+							+
+						</button>
+					</div>
+
+					{/* Action Buttons */}
+					<div className='mt-8 flex flex-col md:flex-row gap-4'>
+						<button
+							onClick={handleAddToCart}
+							disabled={availableQuantity <= 0}
+							className='w-full py-3 border border-gray-300 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2 cursor-pointer'
+						>
+							<ShoppingCartIcon /> Add to Cart
+						</button>
+						<button
+							onClick={handleAddToWishlist}
+							className='w-full py-3 border border-gray-300 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2 cursor-pointer'
+						>
+							<FavoriteIcon /> Add to Wishlist
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
+}
