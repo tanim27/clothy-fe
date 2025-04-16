@@ -55,3 +55,17 @@ body {
 	background-color: var(--background-color);
 	color: var(--text-color);
 }
+
+.shadow-top {
+	box-shadow: 0 -8px 15px -4px rgba(0, 0, 0, 0.2);
+}
+
+/* globals.css or app/globals.css */
+.swiper-pagination-bullet {
+	background-color: #1A1A1D !important;
+	opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+	background-color: #1A1A1D !important;
+}

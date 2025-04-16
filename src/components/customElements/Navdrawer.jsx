@@ -4,6 +4,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
 import ShoppingCartCheckoutRoundedIcon from '@mui/icons-material/ShoppingCartCheckoutRounded'
 import TroubleshootRoundedIcon from '@mui/icons-material/TroubleshootRounded'
@@ -87,6 +88,30 @@ const Navdrawer = ({ isOpen, onClose }) => {
 						</Link>
 					</li>
 
+					{status === 'authenticated' ? (
+						<li>
+							<Link
+								href='/user'
+								className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6]'
+								onClick={onClose}
+							>
+								<AccountCircleRoundedIcon />
+								<span>Profile</span>
+							</Link>
+						</li>
+					) : (
+						<li>
+							<Link
+								href='/'
+								className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6]'
+								onClick={onClose}
+							>
+								<AccountCircleRoundedIcon />
+								<span>Profile</span>
+							</Link>
+						</li>
+					)}
+
 					<li>
 						<Link
 							href='/'
@@ -127,7 +152,7 @@ const Navdrawer = ({ isOpen, onClose }) => {
 							<li>
 								<button
 									onClick={handleAdminLogout}
-									className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6]'
+									className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6] cursor-pointer'
 								>
 									<LogoutRoundedIcon />
 									<span>Logout</span>
@@ -138,10 +163,10 @@ const Navdrawer = ({ isOpen, onClose }) => {
 						<li>
 							<Link
 								href='/login'
-								className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6]'
+								className='flex items-center gap-2 text-[#1A1A1D] hover:text-[#FDFAF6] cursor-pointer'
 								onClick={onClose}
 							>
-								<AccountCircleRoundedIcon />
+								<LoginRoundedIcon />
 								<span>Login</span>
 							</Link>
 						</li>

@@ -14,6 +14,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
 		if (!searchTerm.trim()) return
 		router.push(`/search?query=${encodeURIComponent(searchTerm.trim())}`)
 		onClose()
+		setSearchTerm('')
 	}
 
 	useEffect(() => {

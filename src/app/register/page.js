@@ -1,6 +1,7 @@
 'use client'
 
 import { UserRegisterForm } from '@/components/auth/UserAuthForm'
+
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -16,7 +17,7 @@ const UserRegisterPage = () => {
 	}, [status, router])
 
 	return (
-		<div className='min-h-screen flex justify-center items-center px-4 md:px-0'>
+		<div className='min-h-screen flex justify-center items-center p-8'>
 			<UserRegisterForm />
 		</div>
 	)

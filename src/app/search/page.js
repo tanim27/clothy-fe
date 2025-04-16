@@ -1,12 +1,18 @@
+export const metadata = {
+	title: 'Clothy | Search',
+	description: 'Clothy application search page.',
+}
+
 import SearchResult from '@/components/search/SearchResult'
+
 import { CircularProgress } from '@mui/material'
 import { Suspense } from 'react'
 
-export default function SearchResultsPage() {
+const SearchResultsPage = () => {
 	return (
 		<Suspense
 			fallback={
-				<div>
+				<div className='min-h-screen flex justify-center items-center'>
 					<CircularProgress color='default' />
 				</div>
 			}
@@ -15,3 +21,5 @@ export default function SearchResultsPage() {
 		</Suspense>
 	)
 }
+
+export default SearchResultsPage

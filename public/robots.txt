@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://clothy-fe.onrender.com/sitemap.xml

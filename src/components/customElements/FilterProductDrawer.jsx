@@ -2,9 +2,8 @@
 
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import gsap from 'gsap'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { enqueueSnackbar } from 'notistack'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import slugify from 'slugify'
 
@@ -151,14 +150,6 @@ const FilterProductDrawer = ({ isFilterMenuOpen, onFilterClose }) => {
 		}
 	}, [isFilterMenuOpen])
 
-	const handleAdminLogout = async () => {
-		onFilterClose()
-		setTimeout(() => {
-			signOut({ callbackUrl: '/' })
-		}, 3000)
-		enqueueSnackbar('Logged out successfully.', { variant: 'success' })
-	}
-
 	// Filtered & displayed
 	const filteredCategories = allCategories.filter((c) =>
 		c.toLowerCase().includes(categoryQuery.toLowerCase()),
@@ -199,7 +190,7 @@ const FilterProductDrawer = ({ isFilterMenuOpen, onFilterClose }) => {
 						onClick={onFilterClose}
 						className='text-[#1A1A1D] hover:text-red-500 transition duration-300 cursor-pointer'
 					>
-						<CloseRoundedIcon fontSize='large' />
+						<CloseRoundedIcon fontSize='small' />
 					</button>
 				</div>
 

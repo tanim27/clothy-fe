@@ -3,25 +3,30 @@
 import Navdrawer from '@/components/customElements/Navdrawer'
 import SearchOverlay from '@/components/customElements/SearchOverlay'
 import { useGetProducts } from '@/hooks/useProduct'
+import { useCartContext } from '@/providers/CartProvider'
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'
+import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded'
 import DragHandleRoundedIcon from '@mui/icons-material/DragHandleRounded'
-import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import ShoppingCartCheckoutRoundedIcon from '@mui/icons-material/ShoppingCartCheckoutRounded'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useState } from 'react'
-import FilterProductDrawer from '../customElements/FilterProductDrawer'
 
 const Navbar = () => {
+	const pathname = usePathname()
+	const isHomePage = pathname === '/'
+
 	const { data: session, status } = useSession()
 	const { data: products, isLoading, isError } = useGetProducts()
 	const [isOverlayOpen, setIsOverlayOpen] = useState(false)
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false)
+	const { totalQuantity } = useCartContext()
 
 	const handleSearchOverlayClick = () => {
 		setIsOverlayOpen(!isOverlayOpen)
@@ -44,33 +49,19 @@ const Navbar = () => {
 
 	return (
 		<div>
-			<nav className='bg-[#1A1A1D] p-4'>
-				<div className='bg-[#1A1A1D] container mx-auto flex justify-between items-center'>
-					<h1 className='text-white text-3xl xl:text-4xl font-extrabold'>
-						Clothy
-					</h1>
-
-					{/* <ul className='flex justify-center items-center space-x-8'>
-						{products &&
-							Array.from(
-								new Set(products.map((product) => product.category)),
-							).map((category, index) => (
-								<li key={index}>
-									<Link
-										href={`/products?category=${category.toLowerCase()}`}
-										className='text-white cursor-pointer capitalize'
-									>
-										{category}
-									</Link>
-								</li>
-							))}
-					</ul> */}
+			<nav
+				className={`w-full z-50 transition-colors duration-300 text-[#FDFAF6] uppercase p-4 ${
+					isHomePage ? 'absolute top-0 left-0' : 'bg-[#1A1A1D] shadow-xl'
+				}`}
+			>
+				<div className='container mx-auto flex justify-between items-center'>
+					<h1 className=' text-2xl xl:text-3xl font-extrabold'>Clothy</h1>
 
 					<ul className='hidden md:flex justify-center items-center space-x-8'>
 						<li>
 							<Link
 								href='/products'
-								className='text-sm text-white cursor-pointer'
+								className='text-sm  cursor-pointer'
 							>
 								Products
 							</Link>
@@ -78,14 +69,35 @@ const Navbar = () => {
 						<li>
 							<Link
 								href='/track-order'
-								className='text-sm text-white cursor-pointer'
+								className='text-sm  cursor-pointer'
 							>
 								Track Order
 							</Link>
 						</li>
+
+						{status === 'authenticated' ? (
+							<li>
+								<Link
+									href='/user'
+									className='text-sm  cursor-pointer'
+								>
+									Profile
+								</Link>
+							</li>
+						) : (
+							<li>
+								<Link
+									href='/login'
+									className='text-sm  cursor-pointer'
+								>
+									Profile
+								</Link>
+							</li>
+						)}
+
 						<li>
 							<button
-								className='text-white cursor-pointer'
+								className=' cursor-pointer'
 								onClick={handleSearchOverlayClick}
 							>
 								<SearchRoundedIcon />
@@ -94,7 +106,7 @@ const Navbar = () => {
 						<li>
 							<Link
 								href='/'
-								className='text-white cursor-pointer'
+								className=' cursor-pointer'
 							>
 								<HomeRoundedIcon />
 							</Link>
@@ -104,16 +116,22 @@ const Navbar = () => {
 							<li>
 								<Link
 									href='/cart'
-									className='text-white cursor-pointer'
+									className=' cursor-pointer'
 								>
 									<ShoppingCartCheckoutRoundedIcon />
+
+									{totalQuantity > 0 && (
+										<span className='-top-2 -right-2 bg-[#FDFAF6] text-[#1A1A1D] text-xs font-bold rounded-full px-1.5 py-0.5'>
+											{totalQuantity}
+										</span>
+									)}
 								</Link>
 							</li>
 						) : (
 							<li>
 								<Link
 									href='/login'
-									className='text-white cursor-pointer'
+									className=' cursor-pointer'
 								>
 									<ShoppingCartCheckoutRoundedIcon />
 								</Link>
@@ -123,7 +141,7 @@ const Navbar = () => {
 						{status === 'authenticated' ? (
 							<button
 								onClick={handleAdminLogout}
-								className='text-white cursor-pointer'
+								className=' cursor-pointer'
 							>
 								<LogoutRoundedIcon />
 							</button>
@@ -131,7 +149,7 @@ const Navbar = () => {
 							<li>
 								<Link
 									href='/login'
-									className='text-white cursor-pointer'
+									className=' cursor-pointer'
 								>
 									<AccountCircleRoundedIcon />
 								</Link>
@@ -142,28 +160,63 @@ const Navbar = () => {
 					<ul className='md:hidden flex justify-center items-center space-x-8'>
 						<li>
 							<button
-								className='text-white cursor-pointer'
+								className='cursor-pointer'
 								onClick={handleSearchOverlayClick}
 							>
-								<SearchRoundedIcon fontSize='medium' />
+								<SearchRoundedIcon fontSize='small' />
 							</button>
 						</li>
 
 						<li>
-							<button
-								className='text-white cursor-pointer'
-								onClick={handleFilterMenuClick}
+							<Link
+								href='/products'
+								className='cursor-pointer'
 							>
-								<FilterAltRoundedIcon fontSize='medium' />
-							</button>
+								<CategoryRoundedIcon fontSize='small' />
+							</Link>
 						</li>
 
 						<li>
+							<Link
+								href='/'
+								className='cursor-pointer'
+							>
+								<HomeRoundedIcon fontSize='small' />
+							</Link>
+						</li>
+
+						{status === 'authenticated' ? (
+							<li>
+								<Link
+									href='/cart'
+									className='cursor-pointer'
+								>
+									<ShoppingCartCheckoutRoundedIcon fontSize='small' />
+
+									{totalQuantity > 0 && (
+										<span className='-top-2 -right-2 bg-[#FDFAF6] text-[#1A1A1D] text-xs font-bold rounded-full px-1.5 py-0.5'>
+											{totalQuantity}
+										</span>
+									)}
+								</Link>
+							</li>
+						) : (
+							<li>
+								<Link
+									href='/login'
+									className='cursor-pointer'
+								>
+									<ShoppingCartCheckoutRoundedIcon fontSize='small' />
+								</Link>
+							</li>
+						)}
+
+						<li>
 							<button
-								className='text-white cursor-pointer'
+								className='cursor-pointer'
 								onClick={handleMenuClick}
 							>
-								<DragHandleRoundedIcon fontSize='large' />
+								<DragHandleRoundedIcon fontSize='medium' />
 							</button>
 						</li>
 					</ul>
@@ -172,10 +225,6 @@ const Navbar = () => {
 			<SearchOverlay
 				isOpen={isOverlayOpen}
 				onClose={handleSearchOverlayClick}
-			/>
-			<FilterProductDrawer
-				isFilterMenuOpen={isFilterMenuOpen}
-				onFilterClose={handleFilterMenuClick}
 			/>
 			<Navdrawer
 				isOpen={isMenuOpen}

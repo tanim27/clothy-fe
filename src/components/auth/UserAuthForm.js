@@ -61,7 +61,7 @@ export const UserLoginForm = () => {
 	}
 
 	return (
-		<div className='w-full max-w-lg mx-auto p-8 bg-gradient-to-r from-gray-100 to-white rounded-lg shadow-xl'>
+		<div className='w-full max-w-lg mx-auto p-8 bg-white rounded-lg shadow-xl'>
 			<h2 className='text-4xl font-bold text-center text-[#1F1F1F] mb-6'>
 				User Login
 			</h2>
@@ -209,7 +209,7 @@ export const UserRegisterForm = () => {
 	}
 
 	return (
-		<div className='w-full max-w-lg mx-auto p-8 bg-gradient-to-r from-gray-100 to-white rounded-lg shadow-xl'>
+		<div className='w-full max-w-lg mx-auto p-8 bg-white rounded-lg shadow-xl'>
 			<h2 className='text-4xl font-bold text-center text-[#1F1F1F] mb-6'>
 				User Registration
 			</h2>

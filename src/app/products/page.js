@@ -1,8 +1,13 @@
+export const metadata = {
+	title: 'Clothy | Products',
+	description: 'Clothy application products page.',
+}
+
 import ProductList from '@/components/products/ProductList'
 import { CircularProgress } from '@mui/material'
 import { Suspense } from 'react'
 
-const page = () => {
+const ProductListPage = () => {
 	return (
 		<Suspense
 			fallback={
@@ -11,11 +16,11 @@ const page = () => {
 				</div>
 			}
 		>
-			<div className='min-h-screen px-2 py-4'>
+			<div className='min-h-screen'>
 				<ProductList />
 			</div>
 		</Suspense>
 	)
 }
 
-export default page
+export default ProductListPage

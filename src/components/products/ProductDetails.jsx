@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useState } from 'react'
 
-export default function ProductDetails() {
+const ProductDetails = () => {
 	const { id } = useParams()
 	const { addToCart } = useCartContext()
 	const { data: product, isLoading, isError } = useGetProductById(id)
@@ -20,15 +20,15 @@ export default function ProductDetails() {
 
 	if (isLoading)
 		return (
-			<div className='flex justify-center items-center h-screen'>
+			<div className='h-screen flex justify-center items-center'>
 				<CircularProgress color='default' />
 			</div>
 		)
 
 	if (isError || !product)
 		return (
-			<div className='p-6 text-center'>
-				<p className='text-red-500 text-lg'>Product not found.</p>
+			<div className='flex items-center justify-center p-6'>
+				<p className='text-center text-red-500 text-lg'>Product not found.</p>
 				<Link
 					href='/'
 					className='mt-4 text-blue-600 underline'
@@ -39,7 +39,7 @@ export default function ProductDetails() {
 		)
 
 	// Get available sizes from stock
-	const availableSizes = product.stock.map((item) => item.size)
+	const availableSizes = product?.stock.map((item) => item.size)
 
 	// Set default size if not selected
 	if (!selectedSize && availableSizes.length > 0) {
@@ -47,7 +47,9 @@ export default function ProductDetails() {
 	}
 
 	// Find stock quantity for selected size
-	const selectedStock = product.stock.find((item) => item.size === selectedSize)
+	const selectedStock = product?.stock.find(
+		(item) => item.size === selectedSize,
+	)
 	const availableQuantity = selectedStock ? selectedStock.quantity : 0
 
 	const handleAddToCart = () => {
@@ -61,7 +63,7 @@ export default function ProductDetails() {
 			selectedSize,
 			quantity,
 		})
-		enqueueSnackbar(`Added ${quantity} ${product.name} to cart!`, {
+		enqueueSnackbar(`Added ${quantity} ${product?.name} to cart!`, {
 			variant: 'success',
 		})
 	}
@@ -75,44 +77,54 @@ export default function ProductDetails() {
 	}
 
 	const handleAddToWishlist = () => {
-		alert(`Added ${product.name} to wishlist`)
+		enqueueSnackbar(`Added ${product?.name} to wishlist!`, {
+			variant: 'success',
+		})
 	}
 
 	return (
-		<div className='mx-auto p-8'>
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+		<div className='mx-auto px-8'>
+			<div className='flex items-center space-x-2 font-bold text-[#1a1a1d] text-lg uppercase border-b-2 border-gray-200 py-2 mt-4'>
+				<span className='text-gray-600'>Home</span>
+				<span className='text-gray-600'>|</span>
+				<span className='text-gray-600'>Products</span>
+				<span className='text-gray-600'>|</span>
+				<span className=''>{product?.name}</span>
+			</div>
+
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-8 py-4 mb-4'>
 				{/* Image Section */}
 				<div className='relative w-full h-100 overflow-hidden shadow-none md:shadow-xl'>
 					<img
-						src={product.image}
-						alt={product.name}
+						src={product?.image}
+						alt={product?.name}
 						className='object-cover transform transition-all duration-300 ease-in-out hover:scale-105'
 					/>
 				</div>
 
 				{/* Product Details */}
 				<div className='flex flex-col justify-between'>
-					<h1 className='text-4xl font-extrabold text-gray-800'>
-						{product.name}
+					<h1 className='font-extrabold text-3xl text-[#1A1A1D] uppercase'>
+						{product?.name}
 					</h1>
-					<p className='text-lg text-gray-600 text-justify mt-4'>
-						{product.description}
+					<p className='text-gray-600 text-justify mt-4'>
+						{product?.description}
 					</p>
 
 					{/* Pricing Section */}
 					<div className='mt-6'>
-						{product.offer_price ? (
+						{product?.offer_price ? (
 							<div className='flex items-center space-x-4'>
-								<p className='text-3xl font-extrabold text-gray-900'>
-									${product.offer_price}
+								<p className='text-3xl font-extrabold text-[#1A1A1D]'>
+									${product?.offer_price}
 								</p>
-								<p className='text-xl font-semibold text-red-600 line-through'>
-									${product.price}
+								<p className='font-semibold text-xl text-red-600 line-through'>
+									${product?.price}
 								</p>
 							</div>
 						) : (
-							<p className='text-3xl font-extrabold text-gray-900'>
-								${product.price}
+							<p className='font-extrabold text-3xl text-[#1A1A1D]'>
+								${product?.price}
 							</p>
 						)}
 					</div>
@@ -179,13 +191,13 @@ export default function ProductDetails() {
 						<button
 							onClick={handleAddToCart}
 							disabled={availableQuantity <= 0}
-							className='w-full py-3 border border-gray-300 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2 cursor-pointer'
+							className='w-full py-3 border border-gray-300 text-[#1A1A1D] text-lg font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center gap-2 cursor-pointer'
 						>
 							<ShoppingCartIcon /> Add to Cart
 						</button>
 						<button
 							onClick={handleAddToWishlist}
-							className='w-full py-3 border border-gray-300 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2 cursor-pointer'
+							className='w-full py-3 border border-gray-300 text-[#1A1A1D] text-lg font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center gap-2 cursor-pointer'
 						>
 							<FavoriteIcon /> Add to Wishlist
 						</button>
@@ -195,3 +207,5 @@ export default function ProductDetails() {
 		</div>
 	)
 }
+
+export default ProductDetails

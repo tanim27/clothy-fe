@@ -15,16 +15,16 @@ export const useCreateOrder = () => {
 	})
 }
 
-export const useTrackOrder = (orderID, phoneNumber) => {
+export const useTrackOrder = (phoneNumber) => {
 	return useQuery({
-		queryKey: ['track-order', orderID, phoneNumber], // Re-fetch when orderID or phoneNumber change
+		queryKey: ['track-order', phoneNumber], // Re-fetch when orderID or phoneNumber change
 		queryFn: async () => {
-			if (!orderID || !phoneNumber) return null
+			if (!phoneNumber) return null
 			return await axiosRequest({
 				method: 'GET',
-				url: `/api/orders/track-order?order_id=${orderID}&phone_number=${phoneNumber}`,
+				url: `/api/orders/track-order?phone_number=${phoneNumber}`,
 			})
 		},
-		enabled: !!orderID && !!phoneNumber, // Only fetch when both values are available
+		enabled: !!phoneNumber, // Only fetch when both values are available
 	})
 }

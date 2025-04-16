@@ -1,11 +1,16 @@
-import OrderForm from '@/components/cart/OrderForm'
+export const metadata = {
+	title: 'Clothy | Checkout',
+	description: 'Clothy application checkout page.',
+}
 
-const page = () => {
+import OrderForm from '@/components/order/OrderForm'
+
+const OrderPage = () => {
 	return (
-		<div>
+		<div className='flex justify-center items-center'>
 			<OrderForm />
 		</div>
 	)
 }
 
-export default page
+export default OrderPage

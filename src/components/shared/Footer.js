@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 const Footer = () => {
 	return (
-		<div className='bg-[#f6f6f6]'>
+		<div className='bg-[#f6f6f6] shadow-top'>
 			<footer className='text-[#1a1a1d] uppercase py-12'>
 				{/* Newsletter Section */}
 				<div className='mb-20 max-w-4xl mx-auto px-6 text-center'>
@@ -190,7 +190,7 @@ const Footer = () => {
 							<YouTube />
 						</Link>
 					</div>
-					<p className='text-[#1a1a1d] mt-4 md:mt-0'>
+					<p className='text-[#1a1a1d] text-sm mt-4 md:mt-0'>
 						&copy; {new Date().getFullYear()} Clothy. All rights reserved.
 					</p>
 				</div>

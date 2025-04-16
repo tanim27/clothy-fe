@@ -42,7 +42,7 @@ import { styled } from '@mui/material/styles'
 
 export const CustomSlider = styled(Slider)({
 	color: '#1A1A1D',
-	height: 8,
+	height: 5,
 	'& .MuiSlider-track': {
 		border: 'none',
 	},
