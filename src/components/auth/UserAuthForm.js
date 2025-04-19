@@ -6,6 +6,7 @@ import {
 	UserRegisterValidationSchema,
 } from '@/lib/validations'
 
+import GoogleIcon from '@mui/icons-material/Google'
 import { Button, CircularProgress } from '@mui/material'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { signIn, useSession } from 'next-auth/react'
@@ -18,6 +19,7 @@ export const UserLoginForm = () => {
 	const { data: session } = useSession()
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
+	const [googleLoading, setGoogleLoading] = useState(false)
 
 	const handleSubmit = async (values, { setSubmitting, resetForm }) => {
 		try {
@@ -43,9 +45,22 @@ export const UserLoginForm = () => {
 				router.push('/')
 			}
 		} catch (error) {
-			enqueueSnackbar('An error occurred. Try again.', { variant: 'error' })
+			enqueueSnackbar(error.message || 'An error occurred. Try again.', {
+				variant: 'error',
+			})
 		} finally {
 			setSubmitting(false)
+		}
+	}
+
+	const handleGoogleLogin = async () => {
+		try {
+			setGoogleLoading(true)
+			await signIn('google', { callbackUrl: '/' })
+		} catch (error) {
+			enqueueSnackbar('Google sign-in failed.', { variant: 'error' })
+		} finally {
+			setGoogleLoading(false)
 		}
 	}
 
@@ -62,9 +77,34 @@ export const UserLoginForm = () => {
 
 	return (
 		<div className='w-full max-w-lg mx-auto p-8 bg-white rounded-lg shadow-xl'>
-			<h2 className='text-4xl font-bold text-center text-[#1F1F1F] mb-6'>
+			<h2 className='font-extrabold text-4xl text-center text-[#1F1F1F] mb-6'>
 				User Login
 			</h2>
+
+			{/* Google Login Button */}
+			<Button
+				onClick={handleGoogleLogin}
+				variant='outlined'
+				fullWidth
+				startIcon={<GoogleIcon />}
+				sx={{
+					borderColor: '#ccc',
+					color: '#1F1F1F',
+					fontWeight: 'bold',
+					fontSize: '1rem',
+					height: '3rem',
+					mb: 4,
+					'&:hover': {
+						borderColor: '#999',
+					},
+				}}
+				disabled={googleLoading}
+			>
+				{googleLoading ? 'Signing in...' : 'Log in with Google'}
+			</Button>
+
+			<h4 className='font-extrabold text-center text-[#1F1F1F] text-2xl'>Or</h4>
+
 			<Formik
 				initialValues={{ email: '', password: '' }}
 				validationSchema={UserLoginValidationSchema}
@@ -111,7 +151,7 @@ export const UserLoginForm = () => {
 								href='/forget-password'
 								className='text-[#1F1F1F] hover:underline transition duration-300'
 							>
-								Forget password?
+								Forgot password?
 							</a>
 						</div>
 
@@ -156,6 +196,18 @@ export const UserRegisterForm = () => {
 	const router = useRouter()
 	const { mutateAsync: registerUser, isPending } = useUserRegister()
 	const [loading, setLoading] = useState(false)
+	const [googleLoading, setGoogleLoading] = useState(false)
+
+	const handleGoogleLogin = async () => {
+		try {
+			setGoogleLoading(true)
+			await signIn('google', { callbackUrl: '/' })
+		} catch (error) {
+			enqueueSnackbar('Google sign-in failed.', { variant: 'error' })
+		} finally {
+			setGoogleLoading(false)
+		}
+	}
 
 	const handleSubmit = async (values, { setSubmitting, resetForm }) => {
 		try {
@@ -189,7 +241,7 @@ export const UserRegisterForm = () => {
 				router.push('/')
 			}
 		} catch (error) {
-			enqueueSnackbar(error.response?.data?.message, {
+			enqueueSnackbar(error.message || 'Something went wrong!', {
 				variant: 'error',
 			})
 		} finally {
@@ -210,9 +262,34 @@ export const UserRegisterForm = () => {
 
 	return (
 		<div className='w-full max-w-lg mx-auto p-8 bg-white rounded-lg shadow-xl'>
-			<h2 className='text-4xl font-bold text-center text-[#1F1F1F] mb-6'>
+			<h2 className='font-extrabold text-4xl text-center text-[#1F1F1F] mb-6'>
 				User Registration
 			</h2>
+
+			{/* Google Login Button */}
+			<Button
+				onClick={handleGoogleLogin}
+				variant='outlined'
+				fullWidth
+				startIcon={<GoogleIcon />}
+				sx={{
+					borderColor: '#ccc',
+					color: '#1F1F1F',
+					fontWeight: 'bold',
+					fontSize: '1rem',
+					height: '3rem',
+					mb: 4,
+					'&:hover': {
+						borderColor: '#999',
+					},
+				}}
+				disabled={googleLoading}
+			>
+				{googleLoading ? 'Signing in...' : 'Sign up with Google'}
+			</Button>
+
+			<h4 className='font-extrabold text-center text-[#1F1F1F] text-2xl'>Or</h4>
+
 			<Formik
 				initialValues={{ name: '', email: '', password: '' }}
 				validationSchema={UserRegisterValidationSchema}

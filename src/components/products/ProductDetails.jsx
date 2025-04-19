@@ -85,9 +85,13 @@ const ProductDetails = () => {
 	return (
 		<div className='mx-auto px-8'>
 			<div className='flex items-center space-x-2 font-bold text-[#1a1a1d] text-lg uppercase border-b-2 border-gray-200 py-2 mt-4'>
-				<span className='text-gray-600'>Home</span>
+				<span className='text-gray-600 hover:underline cursor-pointer'>
+					<Link href={'/'}>Home</Link>
+				</span>
 				<span className='text-gray-600'>|</span>
-				<span className='text-gray-600'>Products</span>
+				<span className='text-gray-600 hover:underline cursor-pointer'>
+					<Link href={'/products'}>Products</Link>
+				</span>
 				<span className='text-gray-600'>|</span>
 				<span className=''>{product?.name}</span>
 			</div>

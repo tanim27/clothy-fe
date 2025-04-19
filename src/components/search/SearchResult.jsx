@@ -34,7 +34,9 @@ const SearchResult = () => {
 	return (
 		<div className='min-h-screen p-4'>
 			<div className='flex items-center space-x-2 font-bold text-[#1a1a1d] text-lg uppercase border-b-2 border-gray-200 px-4 py-2'>
-				<span className='text-gray-600'>Home</span>
+				<span className='text-gray-600 hover:underline cursor-pointer'>
+					<Link href={'/'}>Home</Link>
+				</span>
 				<span className='text-gray-600'>|</span>
 				<span className='text-gray-600'>Search</span>
 				<span className='text-gray-600'>|</span>

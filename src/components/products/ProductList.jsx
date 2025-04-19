@@ -288,9 +288,13 @@ const ProductList = () => {
 			</div>
 
 			<div className='flex items-center space-x-2 font-bold text-[#1a1a1d] text-lg uppercase px-4 py-2'>
-				<span className='text-gray-600'>Home</span>
+				<span className='text-gray-600 hover:underline cursor-pointer'>
+					<Link href={'/'}>Home</Link>
+				</span>
 				<span className='text-gray-600'>|</span>
-				<span className='text-gray-600'>Products</span>
+				<span className='text-gray-600 hover:underline cursor-pointer'>
+					<Link href={'/products'}>Products</Link>
+				</span>
 				{selectedCategory && <span className='text-gray-600'>|</span>}
 				{selectedCategory && <span className=''>{selectedCategory}</span>}
 				{selectedSubCategory && <span className='text-gray-600'>|</span>}

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getToken } from 'next-auth/jwt' // For server-side token retrieval
 import { getSession } from 'next-auth/react'
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 const axiosRequest = async ({ req, ...options }) => {
 	let token = null

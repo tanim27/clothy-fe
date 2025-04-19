@@ -23,6 +23,7 @@ const User = () => {
 	}
 
 	const { user } = session
+	const isGoogleUser = user?.provider === 'google'
 
 	return (
 		<div className='w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 mb-4'>
@@ -34,31 +35,36 @@ const User = () => {
 				<div className='text-md text-[#1F1F1F] space-y-4'>
 					<p>
 						<span className='font-semibold text-[#1A1A1D]'>Name:</span>{' '}
-						<span className='font-medium text-gray-900'>
-							{user?.user?.name}
-						</span>
+						<span className='font-medium text-gray-900'>{user?.name}</span>
 					</p>
 					<p>
 						<span className='font-semibold text-[#1A1A1D]'>Email:</span>{' '}
-						<span className='font-medium text-gray-900'>
-							{user?.user?.email}
-						</span>
+						<span className='font-medium text-gray-900'>{user?.email}</span>
 					</p>
 					<p>
 						<span className='font-semibold text-[#1A1A1D]'>Password:</span>{' '}
 						<span className='font-medium text-gray-900'>********</span>
 					</p>
+
+					{isGoogleUser && (
+						<p className='text-sm text-red-600 font-medium'>
+							You are logged in by your google account.
+						</p>
+					)}
 				</div>
 
 				<Button
 					type='submit'
 					variant='contained'
+					disabled={isGoogleUser}
 					sx={{
 						backgroundColor: '#1F1F1F',
 						color: '#FFFFFF',
 						'&:hover': {
-							backgroundColor: '#333333',
+							backgroundColor: isGoogleUser ? '#1F1F1F' : '#333333',
 						},
+						opacity: isGoogleUser ? 0.6 : 1,
+						cursor: isGoogleUser ? 'not-allowed' : 'pointer',
 						height: '3rem',
 						width: '100%',
 						fontSize: '1.125rem',

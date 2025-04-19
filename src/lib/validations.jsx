@@ -29,7 +29,7 @@ export const OrderValidationSchema = Yup.object({
 	}),
 
 	payment_method: Yup.string()
-		.oneOf(['Cash On Delivery', 'sslcommerz'], 'Invalid payment method')
+		.oneOf(['Cash On Delivery', 'Online'], 'Invalid payment method')
 		.required('Please select a payment method'),
 })
 

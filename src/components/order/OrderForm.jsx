@@ -38,12 +38,12 @@ const OrderForm = () => {
 		}
 		try {
 			const res = await mutateAsync(values)
-			clearCart()
+			// clearCart()
 			if (res?.payment_url) {
 				window.location.href = res.payment_url // Redirect to SSLCOMMERZ if online payment
 			} else {
 				enqueueSnackbar('Order confirmed successfully', { variant: 'success' })
-				router.push('/')
+				// router.push('/')
 			}
 		} catch (err) {
 			enqueueSnackbar(err.message, { variant: 'error' })
@@ -181,7 +181,7 @@ const OrderForm = () => {
 								}}
 							>
 								<MenuItem value='Cash On Delivery'>Cash On Delivery</MenuItem>
-								<MenuItem value='sslcommerz'>Online Payment</MenuItem>
+								<MenuItem value='Online'>Online Payment</MenuItem>
 							</Select>
 							<ErrorMessage
 								name='payment_method'

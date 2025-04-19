@@ -61,7 +61,7 @@ const Navdrawer = ({ isOpen, onClose }) => {
 						onClick={onClose}
 						className='text-[#1A1A1D] hover:text-red-500 transition duration-300 cursor-pointer'
 					>
-						<CloseRoundedIcon fontSize='large' />
+						<CloseRoundedIcon fontSize='small' />
 					</button>
 				</div>
 
