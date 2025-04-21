@@ -38,12 +38,19 @@ const OrderForm = () => {
 		}
 		try {
 			const res = await mutateAsync(values)
+
 			clearCart()
-			if (res?.payment_url) {
-				window.location.href = res.payment_url // Redirect to SSLCOMMERZ if online payment
+
+			if (values.payment_method === 'Online') {
+				if (res.gateway_url) {
+					window.location.href = res.gateway_url
+				} else {
+					enqueueSnackbar('Failed to initiate payment', { variant: 'error' })
+				}
 			} else {
-				enqueueSnackbar('Order confirmed successfully', { variant: 'success' })
-				router.push('/')
+				if (res.redirect_url) {
+					router.push(res.redirect_url)
+				}
 			}
 		} catch (err) {
 			enqueueSnackbar(err.message, { variant: 'error' })
